@@ -920,6 +920,12 @@ static inline struct in_addr getenv_ip(char *var)
 	return string_to_ip(getenv(var));
 }
 
+#include <net6.h>
+static inline int getenv_ip6(char *var, struct in6_addr *a)
+{
+	return string_to_ip6(getenv(var), a);
+}
+
 /*
  * CONSOLE multiplexing.
  */
