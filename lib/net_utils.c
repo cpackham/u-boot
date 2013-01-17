@@ -24,10 +24,19 @@ struct in_addr string_to_ip(const char *s)
 
 	for (addr.s_addr = 0, i = 0; i < 4; ++i) {
 		ulong val = s ? simple_strtoul(s, &e, 10) : 0;
+		if (val > 255) {
+			addr.s_addr = 0;
+			return addr;
+		}
 		addr.s_addr <<= 8;
 		addr.s_addr |= (val & 0xFF);
-		if (s) {
-			s = (*e) ? e+1 : e;
+		if (*e == '.') {
+			s = e+1;
+		} else if (*e == '\0') {
+			break;
+		} else {
+			addr.s_addr = 0;
+			return addr;
 		}
 	}
 
