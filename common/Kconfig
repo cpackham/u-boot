@@ -389,6 +389,14 @@ config CMD_NET
 	  bootp - boot image via network using BOOTP/TFTP protocol
 	  tftpboot - boot image via network using TFTP protocol
 
+config CMD_NET6
+	bool "ipv6 commands"
+	select NET
+	select NET6
+	default n
+	help
+	  IPv6 network commands
+
 config CMD_TFTPPUT
 	bool "tftp put"
 	help
@@ -419,6 +427,12 @@ config CMD_PING
 	bool "ping"
 	help
 	  Send ICMP ECHO_REQUEST to network host
+
+config CMD_PING6
+	bool "ping6"
+	depends on CMD_NET6
+	help
+	  Send ICMPv6 ECHO_REQUEST to network host
 
 config CMD_CDP
 	bool "cdp"

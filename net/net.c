@@ -86,6 +86,7 @@
 #include <environment.h>
 #include <errno.h>
 #include <net.h>
+#include <net6.h>
 #include <net/tftp.h>
 #if defined(CONFIG_STATUS_LED)
 #include <miiphy.h>
@@ -94,6 +95,7 @@
 #include <watchdog.h>
 #include <linux/compiler.h>
 #include "arp.h"
+#include "ndisc.h"
 #include "bootp.h"
 #include "cdp.h"
 #if defined(CONFIG_CMD_DNS)
@@ -311,6 +313,7 @@ static int on_dnsip(const char *name, const char *value, enum env_op op,
 U_BOOT_ENV_CALLBACK(dnsip, on_dnsip);
 #endif
 
+
 /*
  * Check if autoload is enabled. If so, use either NFS or TFTP to download
  * the boot file.
@@ -341,8 +344,12 @@ void net_auto_load(void)
 
 static void net_init_loop(void)
 {
-	if (eth_get_dev())
+	if (eth_get_dev()) {
 		memcpy(net_ethaddr, eth_get_ethaddr(), 6);
+#ifdef CONFIG_CMD_NET6
+		ip6_make_lladdr(&net_link_local_ip6, net_ethaddr);
+#endif
+	}
 
 	return;
 }
@@ -376,6 +383,9 @@ void net_init(void)
 				(i + 1) * PKTSIZE_ALIGN;
 		}
 		arp_init();
+#ifdef CONFIG_CMD_NET6
+		ip6_NDISC_init();
+#endif
 		net_clear_handlers();
 
 		/* Only need to setup buffer pointers once. */
@@ -477,6 +487,11 @@ restart:
 		case PING:
 			ping_start();
 			break;
+#ifdef CONFIG_CMD_NET6
+		case PING6:
+			ping6_start();
+			break;
+#endif
 #endif
 #if defined(CONFIG_CMD_NFS)
 		case NFS:
@@ -555,6 +570,9 @@ restart:
 		if (ctrlc()) {
 			/* cancel any ARP that may not have completed */
 			net_arp_wait_packet_ip.s_addr = 0;
+#ifdef CONFIG_CMD_NET6
+			net_nd_sol_packet_ip6 = net_null_addr_ip6;
+#endif
 
 			net_cleanup_loop();
 			eth_halt();
@@ -570,6 +588,9 @@ restart:
 		}
 
 		arp_timeout_check();
+#ifdef CONFIG_CMD_NET6
+		ip6_NDISC_TimeoutCheck();
+#endif
 
 		/*
 		 *	Check for a timeout, and run the timeout handler
@@ -1141,6 +1162,11 @@ void net_process_received_packet(uchar *in_packet, int len)
 		rarp_receive(ip, len);
 		break;
 #endif
+#ifdef CONFIG_CMD_NET6
+	case PROT_IP6:
+		net_ip6_handler(et, (struct ip6_hdr *)ip, len);
+		break;
+#endif
 	case PROT_IP:
 		debug_cond(DEBUG_NET_PKT, "Got IP\n");
 		/* Before we start poking the header, make sure it is there */
@@ -1294,6 +1320,14 @@ static int net_check_prereq(enum proto_t protocol)
 			return 1;
 		}
 		goto common;
+#ifdef CONFIG_CMD_NET6
+	case PING6:
+		if (ip6_is_unspecified_addr(&net_ping_ip6)) {
+			puts("*** ERROR: ping address not given\n");
+			return 1;
+		}
+		goto common;
+#endif
 #endif
 #if defined(CONFIG_CMD_SNTP)
 	case SNTP:
