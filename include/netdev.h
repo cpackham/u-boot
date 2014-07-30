@@ -84,6 +84,7 @@ int sunxi_gmac_initialize(bd_t *bis);
 int tsi108_eth_initialize(bd_t *bis);
 int uec_standard_init(bd_t *bis);
 int uli526x_initialize(bd_t *bis);
+int tg3_register(bd_t *bis);
 int armada100_fec_register(unsigned long base_addr);
 int xilinx_axiemac_initialize(bd_t *bis, unsigned long base_addr,
 							unsigned long dma_addr);
@@ -140,6 +141,9 @@ static inline int pci_eth_init(bd_t *bis)
 #endif
 #if defined(CONFIG_ULI526X)
 	num += uli526x_initialize(bis);
+#endif
+#if defined(CONFIG_TIGON3)
+	num += tg3_register(bis);
 #endif
 
 #endif  /* CONFIG_PCI */
