@@ -479,6 +479,9 @@ unsigned long get_board_sys_clk(unsigned long dummy);
 #endif
 #define CONFIG_SYS_PCIE3_IO_SIZE	0x00010000	/* 64k */
 
+/* Tigon3 card */
+#define CONFIG_TIGON3
+
 /* Qman/Bman */
 #define CONFIG_SYS_DPAA_QBMAN		/* Support Q/Bman */
 #define CONFIG_SYS_BMAN_NUM_PORTALS	10
