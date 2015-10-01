@@ -319,8 +319,8 @@ ip6_add_hdr(uchar *xip, struct in6_addr *src, struct in6_addr *dest,
 	ip6->payload_len = htons(payload_len);
 	ip6->nexthdr = nextheader;
 	ip6->hop_limit = hoplimit;
-	ip6->saddr = *src;
-	ip6->daddr = *dest;
+	memcpy(&ip6->saddr, src, sizeof(struct in6_addr));
+	memcpy(&ip6->daddr, dest, sizeof(struct in6_addr));
 
 	return sizeof(struct ip6_hdr);
 }

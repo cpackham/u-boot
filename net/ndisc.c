@@ -85,6 +85,7 @@ ip6_send_ns(struct in6_addr *neigh_addr)
 	struct nd_msg *msg;
 	__u16 len;
 	uchar *pkt;
+	int init_value = 0;
 
 	debug("sending neighbor solicitation for %pI6c our address %pI6c\n",
 		neigh_addr, &net_link_local_ip6);
@@ -104,11 +105,11 @@ ip6_send_ns(struct in6_addr *neigh_addr)
 	msg = (struct nd_msg *)pkt;
 	msg->icmph.icmp6_type = IPV6_NDISC_NEIGHBOUR_SOLICITATION;
 	msg->icmph.icmp6_code = 0;
-	msg->icmph.icmp6_cksum = 0;
-	msg->icmph.icmp6_unused = 0;
+	memcpy(&msg->icmph.icmp6_cksum, &init_value, sizeof(__be16));
+	memcpy(&msg->icmph.icmp6_unused, &init_value, sizeof(__be32));
 
 	/* Set the target address and llsaddr option */
-	msg->target = *neigh_addr;
+	memcpy(&msg->target, neigh_addr, sizeof(struct in6_addr));
 	ip6_ndisc_insert_option(msg, ND_OPT_SOURCE_LL_ADDR, net_ethaddr,
 		INETHADDRSZ);
 
@@ -128,6 +129,7 @@ ip6_send_na(uchar *eth_dst_addr, struct in6_addr *neigh_addr, struct in6_addr *t
 	struct nd_msg *msg;
 	__u16 len;
 	uchar *pkt;
+	int init_value = 0;
 
 	debug("sending neighbor advertisement for %pI6c to %pI6c (%pM)\n",
 		target, neigh_addr, eth_dst_addr);
@@ -144,11 +146,11 @@ ip6_send_na(uchar *eth_dst_addr, struct in6_addr *neigh_addr, struct in6_addr *t
 	msg = (struct nd_msg *)pkt;
 	msg->icmph.icmp6_type = IPV6_NDISC_NEIGHBOUR_ADVERTISEMENT;
 	msg->icmph.icmp6_code = 0;
-	msg->icmph.icmp6_cksum = 0;
-	msg->icmph.icmp6_unused = 0;
+	memcpy(&msg->icmph.icmp6_cksum, &init_value, sizeof(__be16));
+	memcpy(&msg->icmph.icmp6_unused, &init_value, sizeof(__be32));
 
 	/* Set the target address and lltargetaddr option */
-	msg->target = *target;
+	memcpy(&msg->target, target, sizeof(struct in6_addr));
 	ip6_ndisc_insert_option(msg, ND_OPT_TARGET_LL_ADDR, net_ethaddr,
 		INETHADDRSZ);
 
