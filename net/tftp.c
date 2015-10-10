@@ -94,6 +94,10 @@ static int	tftp_put_final_block_sent;
 #else
 #define tftp_put_active	0
 #endif
+#ifdef CONFIG_CMD_NET6
+/* 1 if using IPv6, else 0 */
+static int      tftp6_active;
+#endif
 
 #define STATE_SEND_RRQ	1
 #define STATE_DATA	2
@@ -129,6 +133,8 @@ static char tftp_filename[MAX_LEN];
 #else
 #define TFTP_MTU_BLOCKSIZE 1468
 #endif
+/* IPv6 adds 20 bytes extra overhead */
+#define TFTP_MTU_BLOCKSIZE6 (TFTP_MTU_BLOCKSIZE - 20)
 
 static unsigned short tftp_block_size = TFTP_BLOCK_SIZE;
 static unsigned short tftp_block_size_option = TFTP_MTU_BLOCKSIZE;
@@ -341,6 +347,11 @@ static void tftp_send(void)
 	 *	We will always be sending some sort of packet, so
 	 *	cobble together the packet headers now.
 	 */
+#ifdef CONFIG_CMD_NET6
+	if (tftp6_active)
+		pkt = net_tx_packet + net_eth_hdr_size() + IP6_HDR_SIZE + IP6_UDPHDR_SIZE;
+	else
+#endif
 	pkt = net_tx_packet + net_eth_hdr_size() + IP_UDP_HDR_SIZE;
 
 	switch (tftp_state) {
@@ -440,6 +451,12 @@ static void tftp_send(void)
 		break;
 	}
 
+#ifdef CONFIG_CMD_NET6
+	if (tftp6_active)
+		net_send_udp_packet6(net_server_ethaddr, &net_server_ip6,
+				     tftp_remote_port, tftp_our_port, len);
+	else
+#endif
 	net_send_udp_packet(net_server_ethaddr, tftp_remote_ip,
 			    tftp_remote_port, tftp_our_port, len);
 }
@@ -747,6 +764,17 @@ void tftp_start(enum proto_t protocol)
 	}
 
 	printf("Using %s device\n", eth_get_name());
+#ifdef CONFIG_CMD_NET6
+	tftp6_active = (protocol == TFTP6);
+	if (tftp6_active) {
+		printf("TFTP from server %pI6c; our IP address is %pI6c",
+		       &net_server_ip6,
+		       &net_ip6);
+		if (tftp_block_size_option > TFTP_MTU_BLOCKSIZE6)
+			tftp_block_size_option = TFTP_MTU_BLOCKSIZE6;
+	}
+	else
+#endif
 	printf("TFTP %s server %pI4; our IP address is %pI4",
 #ifdef CONFIG_CMD_TFTPPUT
 	       protocol == TFTPPUT ? "to" : "from",
@@ -756,6 +784,15 @@ void tftp_start(enum proto_t protocol)
 	       &tftp_remote_ip, &net_ip);
 
 	/* Check if we need to send across this subnet */
+#ifdef CONFIG_CMD_NET6
+	if (tftp6_active) {
+		if (!ip6_addr_in_subnet(&net_ip6, &net_server_ip6,
+					net_prefix_length)) {
+			printf("; sending through gateway %pI6c",
+			       &net_gateway6);
+		}
+	} else
+#endif
 	if (net_gateway.s_addr && net_netmask.s_addr) {
 		struct in_addr our_net;
 		struct in_addr remote_net;
