@@ -60,6 +60,14 @@
 #define NET_CALLBACKS
 #endif
 
+#ifdef CONFIG_NET6
+#define NET6_CALLBACKS \
+	"ip6addr:ip6addr," \
+	"serverip6:serverip6," \
+	"prefixlength6:prefixlength6,"
+#else
+#define NET6_CALLBACKS
+#endif
 /*
  * This list of callback bindings is static, but may be overridden by defining
  * a new association in the ".callbacks" environment variable.
@@ -68,6 +76,7 @@
 	ENV_DOT_ESCAPE ENV_FLAGS_VAR ":flags," \
 	"baudrate:baudrate," \
 	NET_CALLBACKS \
+	NET6_CALLBACKS \
 	"loadaddr:loadaddr," \
 	SILENT_CALLBACK \
 	SPLASHIMAGE_CALLBACK \

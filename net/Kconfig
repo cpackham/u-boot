@@ -22,4 +22,9 @@ config NETCONSOLE
 	  Support the 'nc' input/output device for networked console.
 	  See README.NetConsole for details.
 
+config NET6
+	bool "IPv6 support"
+	help
+	  Support for IPv6
+
 endif   # if NET
