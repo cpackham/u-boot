@@ -15,6 +15,7 @@
 #include <test/test.h>
 #include <test/ut.h>
 #include <net.h>
+#include <net6.h>
 
 #define BUF_SIZE	0x100
 
@@ -103,9 +104,27 @@ static int print_net_ut(struct unit_test_state *uts)
 {
 	char str[40];
 	struct in_addr addr4 = {.s_addr = htonl(0x7f000001)};
+	struct in6_addr addr6 = {.s6_addr16[0] = htons(0x2001), .s6_addr16[1] = htons(0x1234), .s6_addr16[7] = htons(0x0001)};
+	struct in6_addr mapped = {.s6_addr16[5] = htons(0xffff), .s6_addr16[6] = htons(0xc0a8), .s6_addr16[7] = htons(0x0101)};
+	struct in6_addr isatap = {.s6_addr16[5] = htons(0x5efe), .s6_addr16[6] = htons(0xc0a8), .s6_addr16[7] = htons(0x0101)};
 
 	snprintf(str, sizeof(str), "%pI4", &addr4);
 	ut_assertok(strcmp("127.0.0.1", str));
+
+	snprintf(str, sizeof(str), "%pi6", &addr6);
+	ut_assertok(strcmp("20011234000000000000000000000001", str));
+
+	snprintf(str, sizeof(str), "%pI6", &addr6);
+	ut_assertok(strcmp("2001:1234:0000:0000:0000:0000:0000:0001", str));
+
+	snprintf(str, sizeof(str), "%pI6c", &addr6);
+	ut_assertok(strcmp("2001:1234::1", str));
+
+	snprintf(str, sizeof(str), "%pI6c", &mapped);
+	ut_assertok(strcmp("::ffff:192.168.1.1", str));
+
+	snprintf(str, sizeof(str), "%pI6c", &isatap);
+	ut_assertok(strcmp("::5efe:192.168.1.1", str));
 
 	return 0;
 }
