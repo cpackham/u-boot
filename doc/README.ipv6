@@ -1,0 +1,34 @@
+IPv6 Support in U-boot
+----------------------
+IPv6 support in U-boot can be considered experimental. The commands
+currently supported are tftpboot6 and ping6.
+
+The following environment variables are used
+- ip6addr - IPv6 address of the device
+- prefixlength6 - The prefix length of the IPv6 subnet (equivalent to
+  netmask for IPv4)
+- gatewayip6 - IPv6 address of the default gateway
+- serverip6 - IPv6 of the tftp server
+
+Configuration
+-------------
+The following configuration option needs to be selected to support IPv6.
+- CONFIG_CMD_NET6
+Optionally the following can also be selected to enable the ping6
+command.
+- CONFIG_CMD_PING6
+
+TFTP Server Configuration
+-------------------------
+At the time of writing U-boot has been tested against tftp-hpa
+(https://www.kernel.org/pub/software/network/tftp/) the default Debian
+package sets TFTP_ADDRESS=0.0.0.0:69 (in /etc/default/tftpd-hpa) to
+support both IPv4 and IPv6 this need to be changed to ':69'.
+
+Ethernet Driver Requirements
+----------------------------
+For IPv6 to operate correctly the Ethernet device needs to support
+transmission and reception of L2 multicast packets. Transmission is
+usually not a problem. To receive multicast packets the driver needs to
+enable promiscuous mode (some devices have the option of just enabling
+promiscuous multicast reception).
