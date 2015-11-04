@@ -168,6 +168,11 @@ config BOOTP_SERVERIP
 	  variable, not the BOOTP server. This affects the operation of both
 	  bootp and tftp.
 
+config NET6
+	bool "IPv6 support"
+	help
+	  Support for IPv6
+
 endif   # if NET
 
 config SYS_RX_ETH_BUFFER
