@@ -343,10 +343,6 @@
 /*-----------------------------------------------------------------------
  * FPGA stuff
  *----------------------------------------------------------------------*/
-#define CONFIG_FPGA
-#define CONFIG_FPGA_XILINX
-#define CONFIG_FPGA_SPARTAN2
-#define CONFIG_FPGA_SPARTAN3
 
 #define CONFIG_FPGA_COUNT	2
 /*-----------------------------------------------------------------------
