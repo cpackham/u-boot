@@ -392,12 +392,20 @@ static int spartan3_ss_load(xilinx_desc *desc, const void *buf, size_t bsize)
 					(*fn->clk) (false, true, cookie);
 					CONFIG_FPGA_DELAY ();
 					/* Write data */
+#ifdef CONFIG_FPGA_REVERSE_BITSTREAM
+					(*fn->wr) ((val & 0x01), true, cookie);
+#else
 					(*fn->wr) ((val & 0x80), true, cookie);
+#endif
 					CONFIG_FPGA_DELAY ();
 					/* Assert the clock */
 					(*fn->clk) (true, true, cookie);
 					CONFIG_FPGA_DELAY ();
+#ifdef CONFIG_FPGA_REVERSE_BITSTREAM
+					val >>= 1;
+#else
 					val <<= 1;
+#endif
 					i --;
 				} while (i > 0);
 

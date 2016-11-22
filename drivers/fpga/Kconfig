@@ -35,6 +35,13 @@ config FPGA_VIRTEX2
 	help
 	  Enable FPGA driver for Xilinx Virtex2 devices.
 
+config FPGA_REVERSE_BITSTREAM
+	bool "Reverse bitstream when programming"
+	depends on FPGA_SPARTAN3
+	help
+	  Some Xilinx tools generate programs that need to be uploaded LSb
+	  first. Set this option if your fpga binary requires this.
+
 config FPGA_ALTERA
 	bool "Enable Altera FPGA drivers"
 	select FPGA
