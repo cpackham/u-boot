@@ -17,4 +17,22 @@ config FPGA_ZYNQMPPL
 	  Enable FPGA driver for loading bitstream in BIT and BIN format
 	  on Xilinx Zynq UltraScale+ (ZynqMP) device.
 
+config FPGA_SPARTAN3
+	bool "Enable Xilinx Spartan-III driver"
+	depends on FPGA_XILINX
+	help
+	  Enable FPGA driver for Xilinx Spartan-III devices.
+
+config FPGA_SPARTAN2
+	bool "Enable Xilinx Spartan-II driver"
+	depends on FPGA_XILINX
+	help
+	  Enable FPGA driver for Xilinx Spartan-II devices.
+
+config FPGA_VIRTEX2
+	bool "Enable Xilinx Virtex2 driver"
+	depends on FPGA_XILINX
+	help
+	  Enable FPGA driver for Xilinx Virtex2 devices.
+
 endmenu
