@@ -428,7 +428,9 @@ static int spartan3_ss_load(xilinx_desc *desc, const void *buf, size_t bsize)
 			CONFIG_FPGA_DELAY ();
 			(*fn->clk) (true, true, cookie);	/* Assert the clock pin */
 
+#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
 			putc ('*');
+#endif
 
 			if (get_timer (ts) > CONFIG_SYS_FPGA_WAIT) {	/* check the time */
 				puts ("** Timeout waiting for DONE to clear.\n");
@@ -436,7 +438,9 @@ static int spartan3_ss_load(xilinx_desc *desc, const void *buf, size_t bsize)
 				break;
 			}
 		}
+#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
 		putc ('\n');			/* terminate the dotted line */
+#endif
 
 		/*
 		 * Run the post configuration function if there is one.
