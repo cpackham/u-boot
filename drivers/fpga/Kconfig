@@ -69,4 +69,11 @@ config FPGA_SOCFPGA
 	help
 	  Enable FPGA driver for Altera SoCFPGA devices
 
+config FPGA_PROG_FEEDBACK
+	bool "FPGA programming feedback"
+	depends on FPGA_SPARTAN3 || FPGA_SPARTAN2 || \
+		   FPGA_ACEX1K || FPGA_CYCLON2
+	help
+	  Enable printing of hash marks during FPGA configuration.
+
 endmenu
