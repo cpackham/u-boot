@@ -112,7 +112,7 @@ static int ACEX1K_ps_load(Altera_desc *desc, const void *buf, size_t bsize)
 				"done:\t0x%p\n\n",
 				__FUNCTION__, &fn, fn, fn->config, fn->status,
 				fn->clk, fn->data, fn->done);
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		printf ("Loading FPGA Device %d...", cookie);
 #endif
 
@@ -188,7 +188,7 @@ static int ACEX1K_ps_load(Altera_desc *desc, const void *buf, size_t bsize)
 				i --;
 			} while (i > 0);
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			if (bytecount % (bsize / 40) == 0)
 				putc ('.');		/* let them know we are alive */
 #endif
@@ -196,7 +196,7 @@ static int ACEX1K_ps_load(Altera_desc *desc, const void *buf, size_t bsize)
 
 		CONFIG_FPGA_DELAY ();
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		putc (' ');			/* terminate the dotted line */
 #endif
 
@@ -223,7 +223,7 @@ static int ACEX1K_ps_load(Altera_desc *desc, const void *buf, size_t bsize)
 
 	ret_val = FPGA_SUCCESS;
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		if (ret_val == FPGA_SUCCESS) {
 			puts ("Done.\n");
 		}

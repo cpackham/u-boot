@@ -39,8 +39,8 @@
 #define CONFIG_FPGA_DELAY()
 #endif
 
-#ifndef CONFIG_SYS_FPGA_PROG_FEEDBACK
-#define CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifndef CONFIG_FPGA_PROG_FEEDBACK
+#define CONFIG_FPGA_PROG_FEEDBACK
 #endif
 
 /*
@@ -190,7 +190,7 @@ static int virtex2_ssm_load(xilinx_desc *desc, const void *buf, size_t bsize)
 				fn->clk, fn->cs, fn->wr, fn->rdata, fn->wdata,
 				fn->busy, fn->abort, fn->post);
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		printf ("Initializing FPGA Device %d...\n", cookie);
 #endif
 		/*
@@ -294,7 +294,7 @@ static int virtex2_ssm_load(xilinx_desc *desc, const void *buf, size_t bsize)
 			}
 #endif
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			if (bytecount % (bsize / 40) == 0)
 				putc ('.');
 #endif
@@ -307,7 +307,7 @@ static int virtex2_ssm_load(xilinx_desc *desc, const void *buf, size_t bsize)
 		(*fn->cs) (false, true, cookie);
 		(*fn->wr) (false, true, cookie);
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		putc ('\n');
 #endif
 
@@ -329,7 +329,7 @@ static int virtex2_ssm_load(xilinx_desc *desc, const void *buf, size_t bsize)
 		}
 
 		if (ret_val == FPGA_SUCCESS) {
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			printf ("Initialization of FPGA device %d complete\n", cookie);
 #endif
 			/*
@@ -339,7 +339,7 @@ static int virtex2_ssm_load(xilinx_desc *desc, const void *buf, size_t bsize)
 				(*fn->post) (cookie);
 			}
 		} else {
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			printf ("** Initialization of FPGA device %d FAILED\n",
 					cookie);
 #endif
@@ -382,7 +382,7 @@ static int virtex2_ssm_dump(xilinx_desc *desc, const void *buf, size_t bsize)
 			(*fn->clk) (false, true, cookie);
 			(*fn->clk) (true, true, cookie);
 			(*fn->rdata) (&(data[bytecount++]), cookie);
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			if (bytecount % (bsize / 40) == 0)
 				putc ('.');
 #endif
@@ -395,7 +395,7 @@ static int virtex2_ssm_dump(xilinx_desc *desc, const void *buf, size_t bsize)
 		(*fn->clk) (false, true, cookie);
 		(*fn->clk) (true, true, cookie);
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		putc ('\n');
 #endif
 		puts ("Done.\n");

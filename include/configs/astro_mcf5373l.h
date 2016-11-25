@@ -206,7 +206,7 @@
 #define CONFIG_FPGA_COUNT	1
 #define CONFIG_FPGA_ALTERA
 #define CONFIG_FPGA_CYCLON2
-#define CONFIG_SYS_FPGA_PROG_FEEDBACK
+#define CONFIG_FPGA_PROG_FEEDBACK
 #define CONFIG_SYS_FPGA_WAIT		1000
 
 /* End of user parameters to be customized */

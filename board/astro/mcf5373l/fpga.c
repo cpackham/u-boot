@@ -128,7 +128,7 @@ int altera_write_fn(const void *buf, size_t len, int flush, int cookie)
 #if defined(CONFIG_HW_WATCHDOG) || defined(CONFIG_WATCHDOG)
 			WATCHDOG_RESET();
 #endif
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			putc('.');	/* let them know we are alive */
 #endif
 #ifdef CONFIG_SYS_FPGA_CHECK_CTRLC
@@ -347,7 +347,7 @@ int xilinx_fastwr_config_fn(void *buf, size_t len, int flush, int cookie)
 #if defined(CONFIG_HW_WATCHDOG) || defined(CONFIG_WATCHDOG)
 			WATCHDOG_RESET();
 #endif
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			putc('.');	/* let them know we are alive */
 #endif
 #ifdef CONFIG_SYS_FPGA_CHECK_CTRLC

@@ -16,7 +16,7 @@
 #endif
 
 #undef CONFIG_SYS_FPGA_CHECK_BUSY
-#undef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#undef CONFIG_FPGA_PROG_FEEDBACK
 
 /* Note: The assumption is that we cannot possibly run fast enough to
  * overrun the device (the Slave Parallel mode can free run at 50MHz).
@@ -135,7 +135,7 @@ static int spartan2_sp_load(xilinx_desc *desc, const void *buf, size_t bsize)
 		 * Continuous Data Loading in Slave Parallel Mode for
 		 * the Spartan-II Family.
 		 */
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		printf ("Loading FPGA Device %d...\n", cookie);
 #endif
 		/*
@@ -197,7 +197,7 @@ static int spartan2_sp_load(xilinx_desc *desc, const void *buf, size_t bsize)
 			}
 #endif
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			if (bytecount % (bsize / 40) == 0)
 				putc ('.');		/* let them know we are alive */
 #endif
@@ -207,7 +207,7 @@ static int spartan2_sp_load(xilinx_desc *desc, const void *buf, size_t bsize)
 		(*fn->cs) (false, true, cookie);	/* Deassert the chip select */
 		(*fn->wr) (false, true, cookie);	/* Deassert the write pin */
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		putc ('\n');			/* terminate the dotted line */
 #endif
 
@@ -235,7 +235,7 @@ static int spartan2_sp_load(xilinx_desc *desc, const void *buf, size_t bsize)
 		if (*fn->post)
 			(*fn->post) (cookie);
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		if (ret_val == FPGA_SUCCESS)
 			puts ("Done.\n");
 		else
@@ -271,7 +271,7 @@ static int spartan2_sp_dump(xilinx_desc *desc, const void *buf, size_t bsize)
 			(*fn->clk) (false, true, cookie);	/* Deassert the clock pin */
 			(*fn->clk) (true, true, cookie);	/* Assert the clock pin */
 			(*fn->rdata) (&(data[bytecount++]), cookie);	/* read the data */
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			if (bytecount % (bsize / 40) == 0)
 				putc ('.');		/* let them know we are alive */
 #endif
@@ -281,7 +281,7 @@ static int spartan2_sp_dump(xilinx_desc *desc, const void *buf, size_t bsize)
 		(*fn->clk) (false, true, cookie);	/* Deassert the clock pin */
 		(*fn->clk) (true, true, cookie);	/* Assert the clock pin */
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		putc ('\n');			/* terminate the dotted line */
 #endif
 		puts ("Done.\n");
@@ -323,7 +323,7 @@ static int spartan2_ss_load(xilinx_desc *desc, const void *buf, size_t bsize)
 				"done:\t0x%p\n\n",
 				__FUNCTION__, &fn, fn, fn->pgm, fn->init,
 				fn->clk, fn->wr, fn->done);
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		printf ("Loading FPGA Device %d...\n", cookie);
 #endif
 
@@ -386,7 +386,7 @@ static int spartan2_ss_load(xilinx_desc *desc, const void *buf, size_t bsize)
 				i --;
 			} while (i > 0);
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 			if (bytecount % (bsize / 40) == 0)
 				putc ('.');		/* let them know we are alive */
 #endif
@@ -394,7 +394,7 @@ static int spartan2_ss_load(xilinx_desc *desc, const void *buf, size_t bsize)
 
 		CONFIG_FPGA_DELAY ();
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		putc ('\n');			/* terminate the dotted line */
 #endif
 
@@ -426,7 +426,7 @@ static int spartan2_ss_load(xilinx_desc *desc, const void *buf, size_t bsize)
 		if (*fn->post)
 			(*fn->post) (cookie);
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		if (ret_val == FPGA_SUCCESS)
 			puts ("Done.\n");
 		else

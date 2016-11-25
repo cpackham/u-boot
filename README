@@ -2536,7 +2536,7 @@ The following options need to be configured:
 		Enable support for fpga loadbp command - load partial bitstream
 		(Xilinx only)
 
-		CONFIG_SYS_FPGA_PROG_FEEDBACK
+		CONFIG_FPGA_PROG_FEEDBACK
 
 		Enable printing of hash marks during FPGA configuration.
 

@@ -115,7 +115,7 @@ static int CYC2_ps_load(Altera_desc *desc, const void *buf, size_t bsize)
 				"done:\t0x%p\n\n",
 				__FUNCTION__, &fn, fn, fn->config, fn->status,
 				fn->write, fn->done);
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		printf ("Loading FPGA Device %d...", cookie);
 #endif
 
@@ -153,13 +153,13 @@ static int CYC2_ps_load(Altera_desc *desc, const void *buf, size_t bsize)
 			(*fn->abort) (cookie);
 			return FPGA_FAIL;
 		}
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		puts(" OK? ...");
 #endif
 
 		CONFIG_FPGA_DELAY ();
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 		putc (' ');			/* terminate the dotted line */
 #endif
 
@@ -172,13 +172,13 @@ static int CYC2_ps_load(Altera_desc *desc, const void *buf, size_t bsize)
 		(*fn->abort) (cookie);
 		return (FPGA_FAIL);
 	}
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 	puts(" OK\n");
 #endif
 
 	ret_val = FPGA_SUCCESS;
 
-#ifdef CONFIG_SYS_FPGA_PROG_FEEDBACK
+#ifdef CONFIG_FPGA_PROG_FEEDBACK
 	if (ret_val == FPGA_SUCCESS) {
 		puts ("Done.\n");
 	}
