@@ -35,4 +35,38 @@ config FPGA_VIRTEX2
 	help
 	  Enable FPGA driver for Xilinx Virtex2 devices.
 
+config FPGA_ALTERA
+	bool "Enable Altera FPGA drivers"
+	select FPGA
+
+config FPGA_ACEX1K
+	bool "Enable Altera ACEX1K driver"
+	depends on FPGA_ALTERA
+	help
+	  Enable FPGA driver for Altera ACEX1K devices
+
+config FPGA_CYCLON2
+	bool "Enable Altera Cyclone 2 driver"
+	depends on FPGA_ALTERA
+	help
+	  Enable FPGA driver for Altera Cyclone 2 devices
+
+config FPGA_STRATIX_II
+	bool "Enable Altera StratixV driver"
+	depends on FPGA_ALTERA
+	help
+	  Enable FPGA driver for Altera Stratix II devices
+
+config FPGA_STRATIX_V
+	bool "Enable Altera StratixV driver"
+	depends on FPGA_ALTERA
+	help
+	  Enable FPGA driver for Altera StratixV devices
+
+config FPGA_SOCFPGA
+	bool "Enable Altera SoCFPGA driver"
+	depends on FPGA_ALTERA
+	help
+	  Enable FPGA driver for Altera SoCFPGA devices
+
 endmenu
