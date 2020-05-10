@@ -14,6 +14,7 @@
 #include <test/suites.h>
 #include <test/test.h>
 #include <test/ut.h>
+#include <net.h>
 
 #define BUF_SIZE	0x100
 
@@ -97,6 +98,18 @@ static int print_efi_ut(struct unit_test_state *uts)
 }
 PRINT_TEST(print_efi_ut, 0);
 #endif
+
+static int print_net_ut(struct unit_test_state *uts)
+{
+	char str[40];
+	struct in_addr addr4 = {.s_addr = htonl(0x7f000001)};
+
+	snprintf(str, sizeof(str), "%pI4", &addr4);
+	ut_assertok(strcmp("127.0.0.1", str));
+
+	return 0;
+}
+PRINT_TEST(print_net_ut, 0);
 
 static int print_printf(struct unit_test_state *uts)
 {
